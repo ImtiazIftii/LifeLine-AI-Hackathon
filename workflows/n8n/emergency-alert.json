@@ -1,0 +1,39 @@
+{
+  "name": "LifeLine Emergency Alert Escalation",
+  "nodes": [
+    {
+      "parameters": { "path": "lifeline-alert", "httpMethod": "POST" },
+      "name": "Receive Red Alert",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 260]
+    },
+    {
+      "parameters": {
+        "conditions": { "string": [{ "value1": "={{$json.body.severity}}", "operation": "equal", "value2": "Red" }] }
+      },
+      "name": "Is Red Severity",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [430, 260]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://backend:4000/api/alerts",
+        "sendBody": true,
+        "jsonBody": "={{$json.body}}"
+      },
+      "name": "Create Human Review Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 180]
+    }
+  ],
+  "connections": {
+    "Receive Red Alert": { "main": [[{ "node": "Is Red Severity", "type": "main", "index": 0 }]] },
+    "Is Red Severity": { "main": [[{ "node": "Create Human Review Alert", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": {}
+}

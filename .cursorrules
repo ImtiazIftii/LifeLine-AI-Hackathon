@@ -1,0 +1,8 @@
+Use clean modular code.
+Use environment variables for configuration.
+Avoid hardcoded secrets and real patient data.
+Add validation and useful error handling.
+Keep UI simple, accessible, and demo-friendly.
+Prefer free and open-source local-first tools.
+Never describe LifeLine AI output as a diagnosis.
+Preserve citations, human review for emergency alerts, and audit trails.
