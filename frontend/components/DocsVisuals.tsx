@@ -20,7 +20,7 @@ export function FlowDiagram({ nodes }: { nodes: string[] }) {
               )}
               <rect x={x} y="26" width="116" height="58" rx="12" fill="white" stroke="#a8ded5" />
               <foreignObject x={x + 6} y="32" width="104" height="46">
-                <div className="flex h-full items-center justify-center text-center text-[11px] font-semibold leading-4 text-clinic-800">{node}</div>
+                <div className="flex h-full items-center justify-center text-center text-[11px] font-semibold leading-4 text-clinic-900">{node}</div>
               </foreignObject>
             </g>
           );
@@ -45,7 +45,7 @@ export function MetricCards({ metrics }: { metrics: DocsMetrics }) {
         {values.map(([label, value]) => (
           <div key={label} className="rounded-xl border border-clinic-100 bg-clinic-50/50 p-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">{label}</p>
-            <p className="mt-2 text-3xl font-bold text-clinic-800">{value}</p>
+            <p className="mt-2 text-3xl font-bold text-clinic-900">{value}</p>
           </div>
         ))}
       </div>

@@ -106,7 +106,7 @@ export default function DocsPage() {
           </div>
         </div>
         <div className="mt-8 flex flex-wrap gap-3">
-          <button className="rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-clinic-800" onClick={() => window.print()}>Export PDF</button>
+          <button className="rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-clinic-900" onClick={() => window.print()}>Export PDF</button>
           <button className="rounded-xl border border-white/30 px-4 py-2.5 text-sm font-semibold" onClick={exportMarkdown}>Export Markdown</button>
           <button className="rounded-xl border border-white/30 px-4 py-2.5 text-sm font-semibold" onClick={copyLink}>{copied ? "Link copied" : "Copy shareable link"}</button>
           <Link href="/admin/docs" className="rounded-xl border border-white/30 px-4 py-2.5 text-sm font-semibold">Admin editor</Link>
