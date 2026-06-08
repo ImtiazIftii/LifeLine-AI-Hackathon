@@ -19,6 +19,8 @@ export default function AuthPage() {
         body: JSON.stringify(data)
       }, "mother");
       localStorage.setItem("lifeline-token", result.token);
+      localStorage.setItem("lifeline-user-role", result.user.role);
+      localStorage.setItem("lifeline-user-name", result.user.name);
       setMessage(text(language, `Signed in as ${result.user.name} (${result.user.role.replace("_", " ")}).`, `${displayValue(language, result.user.name)} (${displayValue(language, result.user.role)}) হিসেবে প্রবেশ করেছেন।`));
     } catch (error) {
       setMessage(displayContent(language, (error as Error).message));

@@ -12,6 +12,25 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 type Analytics = { risk_distribution: { severity: string; count: number }[]; active_alerts: number; patients_screened: number; referrals_today: number; offline_sync_pending: number };
 
+const riskLevelLabels = {
+  en: {
+    Green: "Routine risk",
+    Yellow: "Follow-up risk",
+    Orange: "Urgent risk",
+    Red: "Emergency risk"
+  },
+  bn: {
+    Green: "নিয়মিত ঝুঁকি",
+    Yellow: "ফলোআপ ঝুঁকি",
+    Orange: "জরুরি ঝুঁকি",
+    Red: "অতি জরুরি ঝুঁকি"
+  }
+} as const;
+
+function riskLevelLabel(language: "en" | "bn", severity: string) {
+  return riskLevelLabels[language][severity as keyof typeof riskLevelLabels.en] || displayValue(language, severity);
+}
+
 export default function AnalyticsPage() {
   const { language } = useLanguage();
   const [data, setData] = useState<Analytics | null>(null);
@@ -27,7 +46,7 @@ export default function AnalyticsPage() {
         </div>
         <section className="card max-w-3xl">
           <h2 className="mb-5 text-lg font-bold">{text(language, "Risk severity distribution", "ঝুঁকির তীব্রতার বণ্টন")}</h2>
-          <Bar data={{ labels: data.risk_distribution.map((row) => displayValue(language, row.severity)), datasets: [{ label: text(language, "Patients", "রোগী"), data: data.risk_distribution.map((row) => row.count), backgroundColor: ["#34d399", "#fbbf24", "#fb923c", "#ef4444"], borderRadius: 8 }] }} options={{ responsive: true, plugins: { legend: { display: false } } }} />
+          <Bar data={{ labels: data.risk_distribution.map((row) => riskLevelLabel(language, row.severity)), datasets: [{ label: text(language, "Patients", "রোগী"), data: data.risk_distribution.map((row) => row.count), backgroundColor: ["#34d399", "#fbbf24", "#fb923c", "#ef4444"], borderRadius: 8 }] }} options={{ responsive: true, plugins: { legend: { display: false } } }} />
         </section>
       </>}
     </div>

@@ -31,7 +31,10 @@ export const config = {
   ollamaBaseUrl: process.env.OLLAMA_BASE_URL || "http://localhost:11434",
   ollamaModel: process.env.OLLAMA_MODEL || "llama3.1:8b",
   llmBaseUrl: process.env.LLM_BASE_URL || "http://localhost:8000",
-  llmModel: process.env.LLM_MODEL || "Qwen/Qwen2.5-7B-Instruct"
+  llmModel: process.env.LLM_MODEL || "Qwen/Qwen2.5-7B-Instruct",
+  groqApiKey: process.env.GROQ_API_KEY || "",
+  groqBaseUrl: process.env.GROQ_BASE_URL || "https://api.groq.com/openai/v1",
+  groqModel: process.env.GROQ_MODEL || "llama-3.1-8b-instant"
 };
 
 export const DISCLAIMER =

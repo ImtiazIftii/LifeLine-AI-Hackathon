@@ -1,0 +1,7 @@
+Patient: Rokeya Akter.
+Age: 21.
+Pregnancy week: 19.
+BP: 110/72.
+Hemoglobin: 11.4.
+Symptoms: none reported.
+Medicines: folic acid.

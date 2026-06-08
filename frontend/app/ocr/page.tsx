@@ -6,7 +6,7 @@ import { PageHeading } from "@/components/UI";
 import { useLanguage } from "@/components/AppShell";
 import { displayContent, displayValue, text } from "@/lib/i18n";
 
-type Extraction = { filename: string; engine: string; verification_required: boolean; extracted_fields: Record<string, string | number | string[]> };
+type Extraction = { filename: string; engine: string; provider?: string; verification_required: boolean; extracted_fields: Record<string, string | number | string[]> };
 
 export default function OcrPage() {
   const { language } = useLanguage();
@@ -35,6 +35,7 @@ export default function OcrPage() {
         <section className="card mt-5">
           <div className="flex justify-between"><h2 className="text-lg font-bold">{text(language, "Extracted record:", "উত্তোলিত নথি:")} {result.filename}</h2><span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">{text(language, "VERIFY REQUIRED", "যাচাই প্রয়োজন")}</span></div>
           <p className="mt-2 text-sm text-slate-500">{text(language, "Engine:", "ইঞ্জিন:")} {text(language, result.engine, "Tesseract/EasyOCR নমুনা")}</p>
+          {result.provider && <p className="mt-1 text-sm text-slate-500">{text(language, "Field extraction:", "ফিল্ড উত্তোলন:")} {result.provider}</p>}
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {Object.entries(result.extracted_fields).map(([key, value]) => <p className="rounded-lg bg-slate-50 p-3 text-sm" key={key}><strong className="capitalize">{displayValue(language, key)}:</strong> {Array.isArray(value) ? value.map((item) => displayValue(language, item)).join(", ") : value}</p>)}
           </div>

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "sample-red",
+    "filename": "sample-red-preeclampsia.txt",
+    "text": "Patient: Ayesha Begum. Age: 25. Pregnancy week: 34. BP: 150/96. Hemoglobin: 10.8. Symptoms: severe headache, swelling of hands and face, blurred vision. Medicines: iron, folic acid."
+  },
+  {
+    "id": "sample-yellow",
+    "filename": "sample-yellow-anemia.txt",
+    "text": "Patient: Mariam Khatun. Age: 30. Pregnancy week: 28. Blood pressure: 116/75. Hb: 9.2. Symptoms: dizziness, fatigue. Medicines: iron, calcium."
+  },
+  {
+    "id": "sample-green",
+    "filename": "sample-green-routine.txt",
+    "text": "Patient: Rokeya Akter. Age: 21. Pregnancy week: 19. BP: 110/72. Hemoglobin: 11.4. Symptoms: none reported. Medicines: folic acid."
+  }
+]

@@ -11,9 +11,13 @@ type Patient = { name: string; age: number; village: string; pregnancy_week: num
 
 export default function PatientDetailPage() {
   const { language } = useLanguage();
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = params?.id;
   const [patient, setPatient] = useState<Patient | null>(null);
-  useEffect(() => { api<Patient>(`/api/patients/${id}`).then(setPatient).catch(() => undefined); }, [id]);
+  useEffect(() => {
+    if (!id) return;
+    api<Patient>(`/api/patients/${id}`).then(setPatient).catch(() => undefined);
+  }, [id]);
   if (!patient) return <p className="card">{text(language, "Loading patient record...", "রোগীর নথি লোড হচ্ছে...")}</p>;
   return (
     <div>

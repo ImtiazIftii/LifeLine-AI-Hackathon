@@ -29,6 +29,17 @@ function docsAdminApi<T>(path: string, options: RequestInit = {}) {
   return api<T>(path, { ...options, headers: { ...(options.headers || {}), Authorization: `Bearer ${token}` } }, "mother");
 }
 
+function currentRole() {
+  const storedRole = localStorage.getItem("lifeline-user-role");
+  const token = localStorage.getItem("lifeline-token") || "";
+  if (storedRole) return storedRole;
+  return token.startsWith("demo-token-") ? token.replace("demo-token-", "") : "";
+}
+
+function isDocsAdminRole(role: string) {
+  return role === "admin" || role === "super_admin";
+}
+
 export default function DocsAdminPage() {
   const [settings, setSettings] = useState<DocsSettings | null>(null);
   const [sections, setSections] = useState<DocsSection[]>([]);
@@ -37,8 +48,16 @@ export default function DocsAdminPage() {
   const [draft, setDraft] = useState<SectionDraft>(emptyDraft);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
+  const [authorized, setAuthorized] = useState<boolean | null>(null);
 
   async function load() {
+    const role = currentRole();
+    if (!isDocsAdminRole(role)) {
+      setAuthorized(false);
+      setError(role ? "Docs Admin requires an admin or super admin account." : "Sign in with a Docs Admin or Docs Super Admin account to manage this page.");
+      return;
+    }
+    setAuthorized(true);
     try {
       const [settingsResult, sectionResult, teamResult] = await Promise.all([
         docsAdminApi<DocsSettings>("/api/docs/settings"),
@@ -138,6 +157,17 @@ export default function DocsAdminPage() {
       setError(reason instanceof Error ? reason.message : "Team member could not be added.");
     }
   }
+
+  if (authorized === false) return (
+    <div className="mx-auto max-w-lg py-20 text-center">
+      <div className="card">
+        <p className="text-xs font-semibold uppercase tracking-[.25em] text-red-600">Restricted</p>
+        <h1 className="mt-3 text-3xl font-bold text-clinic-900">Docs Admin access required</h1>
+        <p className="mt-3 text-slate-600">{error}</p>
+        <Link href="/auth" className="btn-primary mt-6">Sign in as docs admin</Link>
+      </div>
+    </div>
+  );
 
   if (!settings) return (
     <div className="mx-auto max-w-lg py-20 text-center">

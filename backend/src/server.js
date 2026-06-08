@@ -11,7 +11,7 @@ import { analyzeRisk } from "./services/riskService.js";
 import { retrieveGuidance } from "./services/ragService.js";
 import { getRiskPath, initializeGraph, isGraphReady } from "./services/graphService.js";
 import { semanticChunkDocument } from "./services/chunkingService.js";
-import { generateAnswer } from "./services/llmService.js";
+import { extractOcrFields, generateAnswer } from "./services/llmService.js";
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
@@ -279,12 +279,23 @@ app.post("/api/assistant/query", async (req, res) => {
 
 app.post("/api/ocr/extract", upload.single("file"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "Upload an image or PDF record." });
-  const extraction = { blood_pressure: "146/94", hemoglobin: 9.4, pregnancy_week: 34, symptoms: ["headache", "swelling"], medication: ["iron supplement"] };
-  const record = { id: uuid(), filename: req.file.originalname, extracted_fields: extraction, engine: "Tesseract/EasyOCR placeholder", verification_required: true };
+  const ocrText = req.file.mimetype === "text/plain"
+    ? req.file.buffer.toString("utf8")
+    : "Age 25. Pregnancy week 34. BP 146/94. Hb 9.4. Symptoms headache and swelling. Medicine iron supplement.";
+  const fields = await extractOcrFields(ocrText);
+  const extraction = {
+    patient_age: fields.patient_age,
+    pregnancy_week: fields.pregnancy_week,
+    blood_pressure: fields.blood_pressure,
+    hemoglobin: fields.hemoglobin,
+    symptoms: fields.symptoms || [],
+    medicines: fields.medicines || []
+  };
+  const record = { id: uuid(), filename: req.file.originalname, ocr_text: ocrText, extracted_fields: extraction, engine: "OCR placeholder with structured extraction", provider: fields.provider, verification_required: true };
   memory.ocrRecords.unshift(record);
   await tryQuery("INSERT INTO ocr_records (id, filename, extracted_fields, engine) VALUES ($1,$2,$3,$4)", [record.id, record.filename, JSON.stringify(extraction), record.engine]);
   await recordAudit({ eventType: "ocr_extract", role: authRole(req) || "health_worker", summary: "OCR placeholder extracted structured antenatal fields.", disclaimer: "Verify OCR fields against the source record before care decisions." });
-  res.json(record);
+  res.json({ ...record, disclaimer: DISCLAIMER });
 });
 
 app.get("/api/graph/risk-path", (req, res) => {
@@ -322,7 +333,7 @@ app.get("/api/provenance", (_req, res) => {
   res.json({
     sources: ["WHO maternal health public guidance (demo-derived summary)", "Local maternal hypertension field guide placeholder", "Community antenatal workflow demonstration"],
     pipeline: ["document ingestion", "semantic chunking", "metadata tagging", "hybrid retrieval", "graph explanation", "audit logging"],
-    model_runtime: { configured_provider: config.llmProvider, supported: ["Ollama", "llama.cpp", "vLLM"], fallback: "retrieval-template response" },
+    model_runtime: { configured_provider: config.llmProvider, supported: ["Ollama", "Groq", "llama.cpp", "vLLM"], fallback: "retrieval-template response" },
     limitations: ["Demo guideline text must be clinically validated before real-world use.", "Vector similarity is a deterministic placeholder in the MVP."],
     disclaimer: DISCLAIMER
   });

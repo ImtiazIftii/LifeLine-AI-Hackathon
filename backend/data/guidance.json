@@ -1,0 +1,62 @@
+[
+  {
+    "id": "who-hdp-001",
+    "source": "WHO maternal health sample guidance, locally curated demo excerpt",
+    "title": "Hypertension and preeclampsia danger signs",
+    "language": "en",
+    "risk_level": "Red",
+    "symptoms": ["headache", "swelling", "blurred vision"],
+    "conditions": ["hypertension", "preeclampsia"],
+    "text": "Blood pressure at or above 140/90 with severe headache, swelling, or visual symptoms should receive urgent assessment for preeclampsia risk and referral according to local protocol."
+  },
+  {
+    "id": "dghs-hdp-001",
+    "source": "DGHS-style antenatal danger-sign sample, local demo file",
+    "title": "উচ্চ রক্তচাপ সতর্কতা",
+    "language": "bn",
+    "risk_level": "Red",
+    "symptoms": ["headache", "swelling"],
+    "conditions": ["hypertension", "preeclampsia"],
+    "text": "রক্তচাপ ১৪০/৯০ বা তার বেশি এবং মাথাব্যথা বা ফোলা থাকলে জরুরি মূল্যায়ন ও রেফারেল বিবেচনা করতে হবে।"
+  },
+  {
+    "id": "who-bleeding-001",
+    "source": "WHO maternal health sample guidance, locally curated demo excerpt",
+    "title": "Bleeding danger sign",
+    "language": "en",
+    "risk_level": "Red",
+    "symptoms": ["bleeding"],
+    "conditions": ["hemorrhage"],
+    "text": "Vaginal bleeding during pregnancy is a danger sign and requires rapid assessment by a qualified provider."
+  },
+  {
+    "id": "dghs-anemia-001",
+    "source": "DGHS-style antenatal nutrition sample, local demo file",
+    "title": "রক্তস্বল্পতা ফলো-আপ",
+    "language": "bn",
+    "risk_level": "Yellow",
+    "symptoms": ["dizziness", "fatigue"],
+    "conditions": ["anemia"],
+    "text": "হিমোগ্লোবিন ১০ g/dL এর কম হলে স্বাস্থ্যকর্মীর মূল্যায়ন, পুষ্টি পরামর্শ, আয়রন গ্রহণ যাচাই এবং ফলো-আপ পরীক্ষা দরকার।"
+  },
+  {
+    "id": "who-abdomen-001",
+    "source": "WHO obstetric triage sample, local demo excerpt",
+    "title": "Fever with abdominal pain",
+    "language": "en",
+    "risk_level": "Orange",
+    "symptoms": ["fever", "abdominal pain"],
+    "conditions": ["infection", "obstetric complication"],
+    "text": "Fever combined with abdominal pain in pregnancy should receive same-day assessment for possible infection or obstetric complication."
+  },
+  {
+    "id": "dghs-routine-001",
+    "source": "DGHS-style community ANC sample, local demo file",
+    "title": "নিয়মিত পর্যবেক্ষণ",
+    "language": "bn",
+    "risk_level": "Green",
+    "symptoms": ["fatigue"],
+    "conditions": ["routine care"],
+    "text": "বিপদের লক্ষণ না থাকলে নির্ধারিত প্রসবপূর্ব পরীক্ষা চালিয়ে যান এবং নতুন লক্ষণ দেখা দিলে দ্রুত জানান।"
+  }
+]

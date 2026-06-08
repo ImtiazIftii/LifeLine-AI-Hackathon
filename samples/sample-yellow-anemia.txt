@@ -1,0 +1,7 @@
+Patient: Mariam Khatun.
+Age: 30.
+Pregnancy week: 28.
+Blood pressure: 116/75.
+Hb: 9.2.
+Symptoms: dizziness, fatigue.
+Medicines: iron, calcium.

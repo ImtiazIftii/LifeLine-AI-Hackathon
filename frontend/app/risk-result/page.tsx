@@ -8,17 +8,26 @@ import { displayContent, displayValue, text } from "@/lib/i18n";
 
 type Result = {
   risk: { score: number; severity: string; reasons: string[]; recommendations: string[]; requires_human_review: boolean };
-  retrieval: { chunks: { title: string; source: string; chunk_text: string; language: string }[] };
+  retrieval: { chunks: { title: string; source: string; chunk_text?: string; text?: string; language: string }[] };
   graph: { path: string[]; explanation: string; source: string };
   alert_created: boolean;
 };
+
+function guidanceText(chunk: Result["retrieval"]["chunks"][number]) {
+  return chunk.chunk_text || chunk.text || "Guidance text was not included in this response.";
+}
 
 export default function RiskResultPage() {
   const { language } = useLanguage();
   const [result, setResult] = useState<Result | null>(null);
   useEffect(() => {
     const stored = localStorage.getItem("latest-risk-result");
-    if (stored) setResult(JSON.parse(stored));
+    if (!stored) return;
+    try {
+      setResult(JSON.parse(stored));
+    } catch {
+      localStorage.removeItem("latest-risk-result");
+    }
   }, []);
   if (!result) return <div className="card"><p>{text(language, "No new risk result is stored on this device.", "এই ডিভাইসে নতুন কোনো ঝুঁকি ফলাফল সংরক্ষিত নেই।")}</p><Link className="btn-primary mt-4" href="/intake">{text(language, "Run an intake", "নতুন তথ্য গ্রহণ করুন")}</Link></div>;
   return (
@@ -47,7 +56,7 @@ export default function RiskResultPage() {
             {result.retrieval.chunks.map((chunk) => (
               <article className="mb-3 rounded-xl border border-slate-100 p-4" key={chunk.title}>
                 <p className="text-sm font-bold text-clinic-700">{displayValue(language, chunk.title)}</p>
-                <p className="my-2 text-sm text-slate-700">{displayContent(language, chunk.chunk_text)}</p>
+                <p className="my-2 text-sm text-slate-700">{displayContent(language, guidanceText(chunk))}</p>
                 <p className="text-xs text-slate-500">{text(language, "Source:", "উৎস:")} {displayValue(language, chunk.source)} | {text(language, "Displayed language:", "প্রদর্শিত ভাষা:")} {displayValue(language, language)}</p>
               </article>
             ))}

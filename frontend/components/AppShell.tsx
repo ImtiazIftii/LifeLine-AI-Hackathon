@@ -17,6 +17,7 @@ export function useLanguage() {
 const nav = [
   ["Intake", "ইনটেক", "/intake"],
   ["Assistant", "সহায়তা", "/assistant"],
+  ["Nutrition", "পুষ্টি", "/nutrition"],
   ["Worker Dashboard", "কর্মী ড্যাশবোর্ড", "/dashboard"],
   ["Analytics", "বিশ্লেষণ", "/analytics"],
   ["OCR", "ওসিআর", "/ocr"],

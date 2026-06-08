@@ -1,0 +1,7 @@
+Patient: Ayesha Begum.
+Age: 25.
+Pregnancy week: 34.
+BP: 150/96.
+Hemoglobin: 10.8.
+Symptoms: severe headache, swelling of hands and face, blurred vision.
+Medicines: iron, folic acid.
