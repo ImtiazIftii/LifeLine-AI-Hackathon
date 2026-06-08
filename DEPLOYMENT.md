@@ -71,8 +71,8 @@ backend/
 Build and start commands configured by the blueprint:
 
 ```bash
-npm ci --omit=dev && npm run build
-npm run start
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
 
 Set these Render environment values:
@@ -94,7 +94,10 @@ Set these Render environment values:
 | `ALLOW_DEMO_ROLE_HEADER` | `false` for production |
 | `ENABLE_DEMO_ACCOUNTS` | `false` for production |
 | `ALLOW_PRIVILEGED_SELF_REGISTRATION` | `false` for production |
-| `LLM_PROVIDER` | `mock` for the reliable no-paid-API demo |
+| `LLM_PROVIDER` | `groq` to use Groq-backed OCR, Assistant, and Nutrition reasoning; use `mock` for local-only fallback |
+| `GROQ_API_KEY` | Private Groq API key, stored only in Render environment variables |
+| `GROQ_BASE_URL` | `https://api.groq.com/openai/v1` |
+| `GROQ_MODEL` | `llama-3.1-8b-instant` |
 
 Optional values:
 

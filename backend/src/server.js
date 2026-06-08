@@ -303,6 +303,66 @@ app.get("/api/graph/risk-path", (req, res) => {
   res.json({ graph: getRiskPath(symptoms), disclaimer: DISCLAIMER });
 });
 
+function nutritionPlan(payload = {}) {
+  const symptoms = Array.isArray(payload.symptoms) ? payload.symptoms.map((item) => String(item).toLowerCase()) : [];
+  const hemoglobin = Number(payload.hemoglobin || 0);
+  const bp = String(payload.bp || payload.blood_pressure || "");
+  const bpMatch = bp.match(/(\d{2,3})\s*\/\s*(\d{2,3})/);
+  const systolic = bpMatch ? Number(bpMatch[1]) : 0;
+  const diastolic = bpMatch ? Number(bpMatch[2]) : 0;
+  const highBp = systolic >= 140 || diastolic >= 90;
+  const anemiaSupport = (hemoglobin > 0 && hemoglobin < 10) || symptoms.includes("weakness") || symptoms.includes("dizziness");
+  const highRisk = highBp && (symptoms.includes("headache") || symptoms.includes("swelling") || symptoms.includes("blurred vision"));
+  const risk = highRisk ? "High risk - urgent review" : anemiaSupport ? "Possible anemia nutrition support needed" : "Routine nutrition support";
+  const riskReasons = [];
+  if (highRisk) riskReasons.push("High blood pressure with headache, swelling, or blurred vision is a danger-sign pattern; urgent medical evaluation is needed.");
+  if (anemiaSupport) riskReasons.push("Possible anemia nutrition support needed because low hemoglobin, weakness, or dizziness is present.");
+  if (highBp) riskReasons.push("Blood pressure is elevated; reduce excess salt and avoid processed salty snacks.");
+  if (symptoms.includes("nausea") || symptoms.includes("vomiting") || symptoms.includes("low appetite")) riskReasons.push("Small frequent bland meals and fluids may help nausea, vomiting, or low appetite.");
+  if (symptoms.includes("constipation")) riskReasons.push("Constipation support should include fiber-rich foods, vegetables, fruits, and water.");
+  if (!riskReasons.length) riskReasons.push("No nutrition danger pattern was detected from the submitted demo information.");
+
+  return {
+    risk,
+    risk_reasons: riskReasons,
+    risk_aware_nutrition_advice: [
+      "Use iron-rich foods with vitamin C when anemia support is needed.",
+      "Nutrition advice does not replace urgent evaluation for danger signs.",
+      "Keep meals simple, affordable, and culturally familiar for Bangladesh."
+    ],
+    one_day_meal_plan: {
+      breakfast: "egg + roti/rice + banana",
+      lunch: "rice + lentils + spinach + small fish + lemon",
+      snack: "guava/banana + water",
+      dinner: "rice + dal + mixed vegetables + egg/fish"
+    },
+    three_day_meal_plan: [
+      { day: 1, breakfast: "egg + roti/rice + banana", lunch: "rice + lentils + spinach + small fish + lemon", snack: "guava/banana + water", dinner: "rice + dal + mixed vegetables + egg/fish" },
+      { day: 2, breakfast: "roti or rice + egg/lentils + banana", lunch: "rice + dal + spinach + small fish or egg + lemon", snack: "guava + safe drinking water", dinner: "rice + mixed vegetables + dal + egg or fish" },
+      { day: 3, breakfast: "rice porridge or roti + egg + banana", lunch: "rice + lentils + leafy vegetables + lemon", snack: "guava or seasonal fruit + water", dinner: "rice + vegetables + dal + small fish/egg if allowed" }
+    ],
+    foods_to_prioritize: ["lentils", "spinach or leafy vegetables", "small fish or egg if allowed", "lemon or guava with iron-rich meals", "safe drinking water"],
+    foods_to_avoid: ["excess salt", "processed salty snacks", "unwashed produce", "undercooked fish, egg, chicken, or liver"],
+    warning_signs_requiring_doctor_visit: [
+      "Seek urgent care for severe dizziness, breathlessness, bleeding, fainting, seizure, or severe abdominal pain.",
+      "Seek urgent care if high blood pressure occurs with headache, swelling, or blurred vision.",
+      "Seek care if vomiting is severe, fluids cannot be kept down, or signs of dehydration appear."
+    ],
+    bangla_explanation: highRisk
+      ? "উচ্চ রক্তচাপের সঙ্গে মাথাব্যথা, ফোলা বা চোখে ঝাপসা থাকলে এটি বিপদসংকেত হতে পারে। জরুরি চিকিৎসা মূল্যায়ন প্রয়োজন।"
+      : "কম হিমোগ্লোবিন, দুর্বলতা বা মাথা ঘোরার ক্ষেত্রে আয়রনসমৃদ্ধ খাবার যেমন ডাল, পালং শাক, ছোট মাছ, ডিম এবং লেবু/পেয়ারার মতো ভিটামিন সি উৎস সহায়ক হতে পারে।",
+    rag_guidance: [{ title: "Anemia And Low Hemoglobin", text: "Prioritize iron-rich foods with vitamin C sources; severe symptoms require medical care.", score: anemiaSupport ? 5 : 0 }],
+    food_database_matches: [],
+    location: payload.location || "Bangladesh",
+    provider: "local nutrition rules fallback",
+    disclaimer: "Nutrition suggestions are educational decision-support only and do not replace doctors or registered dietitians."
+  };
+}
+
+app.post("/api/nutrition/plan", (req, res) => {
+  res.json(nutritionPlan(req.body));
+});
+
 app.post("/api/alerts", requireRole("health_worker", "doctor_admin"), async (req, res) => {
   const alert = { id: uuid(), ...req.body, requires_human_review: req.body.severity === "Red", status: "Open", created_at: new Date().toISOString() };
   if (!alert.patient_name || !alert.severity || !alert.message) return res.status(400).json({ error: "Patient, severity, and message are required." });

@@ -1,11 +1,11 @@
 services:
   - type: web
     name: lifeline-api
-    runtime: node
+    runtime: python
     rootDir: backend
     plan: free
-    buildCommand: npm ci --omit=dev && npm run build
-    startCommand: npm run start
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
@@ -43,4 +43,10 @@ services:
       - key: DOCS_SUPER_ADMIN_PASSWORD
         sync: false
       - key: LLM_PROVIDER
-        value: mock
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant

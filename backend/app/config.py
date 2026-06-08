@@ -26,4 +26,10 @@ LLM_PROVIDER = os.getenv("LLM_PROVIDER", "mock")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 GROQ_BASE_URL = os.getenv("GROQ_BASE_URL", "https://api.groq.com/openai/v1")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
+CORS_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")
+    if origin.strip()
+]
+ALLOW_VERCEL_PREVIEWS = os.getenv("ALLOW_VERCEL_PREVIEWS", "false").lower() == "true"
 DATA_DIR = os.path.join(BACKEND_DIR, "data")

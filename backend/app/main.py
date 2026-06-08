@@ -7,7 +7,7 @@ from fastapi import Depends, FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from .config import DISCLAIMER, LLM_PROVIDER
+from .config import ALLOW_VERCEL_PREVIEWS, CORS_ORIGINS, DISCLAIMER, LLM_PROVIDER
 from .data import DASHBOARD, GUIDANCE, SAMPLE_RECORDS
 from .extraction import extract_with_optional_llm
 from .graph import reason_graph
@@ -18,9 +18,26 @@ from routes.nutrition import router as nutrition_router
 from services.llm_clients import generate_grounded_assistant_answer
 
 app = FastAPI(title="LifeLine AI Free Demo API", version="1.0.0")
+
+
+def allowed_origin(origin: str) -> bool:
+    if origin in CORS_ORIGINS:
+        return True
+    if ALLOW_VERCEL_PREVIEWS:
+        try:
+            from urllib.parse import urlparse
+
+            parsed = urlparse(origin)
+            return parsed.scheme == "https" and parsed.hostname is not None and parsed.hostname.endswith(".vercel.app")
+        except Exception:
+            return False
+    return False
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=CORS_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app" if ALLOW_VERCEL_PREVIEWS else None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

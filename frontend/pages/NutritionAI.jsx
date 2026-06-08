@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import MealPlanCard from "@/components/MealPlanCard";
-import { api } from "@/lib/api";
+import { API_URL, api } from "@/lib/api";
 
 const symptomOptions = ["dizziness", "weakness", "swelling", "nausea", "vomiting", "headache", "constipation", "low appetite"];
 
@@ -42,7 +42,8 @@ export default function NutritionAI() {
       );
       setResult(response);
     } catch (reason) {
-      setError(reason.message || "Nutrition plan could not be generated.");
+      const message = reason.message || "Nutrition plan could not be generated.";
+      setError(`${message}. API: ${API_URL}`);
     } finally {
       setLoading(false);
     }
