@@ -1,4 +1,5 @@
 ## Screenshots
+Please Go through the vercel link and see the website for a better understanding if you are interested
 
 ### Homepage
 ![Homepage](screenshots/homepage.jpeg)
