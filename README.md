@@ -1,5 +1,7 @@
 ## Screenshots
-(screenshots/homepage.jpeg)
+
+### Homepage
+![Homepage](screenshots/homepage.jpeg)
 
 # LifeLine AI
 
