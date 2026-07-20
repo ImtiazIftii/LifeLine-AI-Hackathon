@@ -1,6 +1,6 @@
 ## Screenshots
 Please Go through the vercel link and see the website for a better understanding if you are interested 
-##life-line-ai-hackathon.vercel.app 
+
 
 ### Homepage
 ![Homepage](screenshots/homepage.jpeg)
