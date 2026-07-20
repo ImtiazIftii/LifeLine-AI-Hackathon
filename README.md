@@ -1,3 +1,5 @@
+## screenshots
+
 # LifeLine AI
 
 LifeLine AI is a fully free, local-first demonstration of an AI-powered maternal health emergency risk assistant. It uses open-source/self-hosted components only and is designed for seeded demo workflows, not real patient care.
