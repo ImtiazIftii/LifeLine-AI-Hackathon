@@ -1,9 +1,12 @@
 ## Screenshots
-Please Go through the vercel link and see the website for a better understanding if you are interested 
+Please Go through the vercel link and see the website and the screenshots section for a better understanding if you are interested.
 
 
 ### Homepage
 ![Homepage](screenshots/homepage.jpeg)
+
+### NutritionPlan
+![NutritionPlan](screenshots/nutritionPlan.jpeg)
 
 # LifeLine AI
 
