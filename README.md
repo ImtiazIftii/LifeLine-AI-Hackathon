@@ -1,4 +1,5 @@
-## screenshots
+## Screenshots
+(screenshots/homepage.jpeg)
 
 # LifeLine AI
 
